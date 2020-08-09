@@ -1,0 +1,18 @@
+Bootstrap: docker
+From: centos:7
+
+%labels
+Maintainer eric.burgueno@plantandfood.co.nz
+Version 3.2.3
+
+%post
+  ## Install official RPM
+  yum -y install 'http://www.openbugs.net/w/OpenBUGS_3_2_3_RH7?action=AttachFile&do=get&target=openbugs-3.2.3-1.x86_64.rpm'
+
+%runscript
+if [ -x /usr/bin/$SINGULARITY_NAME ]; then
+    exec $SINGULARITY_NAME "$@"
+else
+  /bin/echo -e "This Singularity image cannot provide a single entrypoint. Please use \"singularity exec $SINGULARITY_NAME <cmd>\", where <cmd> is one of the following:\n"
+  exec ls /usr/bin/OpenBUGS*
+fi
